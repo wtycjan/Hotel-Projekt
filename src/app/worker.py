@@ -1,14 +1,12 @@
 import system
 from hotel import Hotel
 from guest import Guest
-from system import System
 from reservations import Reservation
 import database
 
 class Worker:
     hotel = Hotel()
     guest = Guest()
-    system = System()
     reservations = Reservation()
 
     def worker_menu(self, user_id):
@@ -17,13 +15,13 @@ class Worker:
             if user_input == 'hotels':
                 self.hotel.list_hotels()
             elif user_input == 'list res':
-                self.guest.list_all_reservations()
+                self.reservations.list_all_reservations()
             elif user_input == 'stat':
                 self.statistic_menu()
             elif user_input == 'moderate':
                 self.moderate_menu()
             elif user_input == 'log out':
-                self.system.menu()
+                system.System().menu()
             else:
                 print("Unknown command! try again.")
 
@@ -75,7 +73,7 @@ class Worker:
             print("Unknown command! Try again.")
 
     def adding_room_process(self):
-        hotel_id = self.reservations.choose_hotel()
+        hotel_id = self.hotel.choose_hotel()
         self.hotel.list_room_types()
         room_type_id = int(input("Enter the number of room type you want to create: "))
         decision = input(system.ADD_ROOM_DECISION_INTERFACE)
@@ -88,7 +86,7 @@ class Worker:
             print("Unknown command! Try again.")
 
     def deleting_hotel_process(self):
-        hotel_id = self.reservations.choose_hotel()
+        hotel_id = self.hotel.choose_hotel()
         decision = input(system.DELETE_HOTEL_DECISION_INTERFACE)
         if decision == 'yes':
             database.delete_hotel(hotel_id)
@@ -99,7 +97,7 @@ class Worker:
             print("Unknown command! Try again.")
 
     def deleting_room_process(self):
-        hotel_id = self.reservations.choose_hotel()
+        hotel_id = self.hotel.choose_hotel()
         room_id, room_cost = self.reservations.choose_room(hotel_id)
         print(room_id)
         decision = input(system.DELETE_ROOM_DECISION_INTERFACE)

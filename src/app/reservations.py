@@ -3,18 +3,17 @@ from datetime import datetime
 import system
 import database
 from hotel import Hotel
-from guest import Guest
+
 
 class Reservation:
     hotels = Hotel()
-    guest = Guest()
 
     def make_reservation(self, user_id):
         user_input = input(system.RESERVATION_MENU_INTERFACE)
         while user_input != 'back':
             if user_input == 'fill':
                 print("Here is the reservation form:")
-                hotel_id = self.choose_hotel()
+                hotel_id = self.hotels.choose_hotel()
 
                 date_format = '%Y-%m-%d'
                 first_day_obj = self.choose_start_date(date_format)
@@ -67,7 +66,7 @@ class Reservation:
         user_input = input(system.CLIENT_EDIT_RESERVATION_MENU)
         while True:
             if user_input == 'hotel':
-                reservation_obj['hotel_id'] = self.choose_hotel()
+                reservation_obj['hotel_id'] = self.hotels.choose_hotel()
 
             elif user_input == 'date':
                 date_format = '%Y-%m-%d'
@@ -127,20 +126,6 @@ class Reservation:
                 break
         return datetime.datetime.strptime(date_string, date_format), date_string
 
-    def choose_hotel(self):
-        self.hotels.list_hotels()
-        hotel_id = int(input("Enter the number of hotel from list above: "))
-        hotels = database.get_all_hotels()
-        searching = True
-        while searching:
-            for hotel in hotels:
-                if hotel['hotel_ID'] == hotel_id:
-                    searching = False
-                    break
-            if searching:
-                self.hotels.list_hotels()
-                hotel_id = int(input("Enter the proper hotel number from list above: "))
-        return hotel_id
 
     def choose_start_date(self, date_format):
         first_day = input("Enter first day of your reservation 'RRRR-MM-DD': ")
@@ -216,7 +201,7 @@ class Reservation:
         return payment_method_id, payment_method_discount
 
     def choose_reservation(self, user_id, action_name):
-        self.guest.list_my_reservations_info(user_id)
+        self.list_my_reservations_info(user_id)
         reservation_id = int(input(f"Enter the reservation number from a list above, you want to {action_name}: "))
         reservations = database.get_my_reservations_info(user_id)
         searching = True
@@ -228,7 +213,7 @@ class Reservation:
                     searching = False
                     break
             if searching:
-                self.guest.list_my_reservations_info(user_id)
+                self.list_my_reservations_info(user_id)
                 reservation_id = int(
                     input(f"Enter the proper reservation number from a list above, you want to {action_name}: "))
         return reservation_obj
@@ -260,3 +245,27 @@ class Reservation:
                 print("Unknown command! Try again.")
 
             user_input = input(system.CLIENT_PICK_TO_DELETE_RESERVATION_MENU)
+
+    @staticmethod
+    def list_all_reservations():
+        reservation_list = database.get_all_reservations_info()
+        for reservation in reservation_list:
+            print(f"Reservation number: {reservation['reservation_ID']}\n"
+                  f"\tClient: {reservation['user_name']} {reservation['user_surname']}\n"
+                  f"\tHotel: {reservation['hotel_name']}\n"
+                  f"\tDate: {reservation['first_day']} - {reservation['last_day']}\n"
+                  f"\tRoom: {reservation['room_ID']} {reservation['room_type']}\n"
+                  f"\tDining option: {reservation['dining_option_type']}\n"
+                  f"\tPayment: {reservation['payment_method']} - {reservation['cost']} PLN")
+
+    @staticmethod
+    def list_my_reservations_info(user_id):
+        reservation_list = database.get_my_reservations_info(user_id)
+        for reservation in reservation_list:
+            print(f"Reservation number: {reservation['reservation_ID']}\n"
+                  f"\tClient: {reservation['user_name']} {reservation['user_surname']}\n"
+                  f"\tHotel: {reservation['hotel_name']}\n"
+                  f"\tDate: {reservation['first_day']} - {reservation['last_day']}\n"
+                  f"\tRoom: {reservation['room_ID']} {reservation['room_type']}\n"
+                  f"\tDining option: {reservation['dining_option_type']}\n"
+                  f"\tPayment: {reservation['payment_method']} - {reservation['cost']} PLN")

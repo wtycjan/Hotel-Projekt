@@ -1,10 +1,7 @@
 import database
-from hotel import Hotel
-from reservations import Reservation
+
 
 class Hotel:
-    hotel = Hotel()
-    reservations = Reservation()
 
     def list_hotels(self):
         print("List of all available hotels:")
@@ -49,7 +46,7 @@ class Hotel:
                 f"\t - {payment_method['payment_method_ID']} {payment_method['payment_method']} - amount of discount: {discount}%")
 
     def hotel_info(self):
-        hotel_id = self.reservations.choose_hotel()
+        hotel_id = self.choose_hotel()
         print("Here is more information about the hotel you chose:")
         hotel = database.get_hotel_address(hotel_id)
         print(f"\tHotel number: {hotel[0]['hotel_ID']}")
@@ -57,9 +54,24 @@ class Hotel:
         print(f"\tCountry: {hotel[0]['country_name']}")
         print(f"\tCity: {hotel[0]['location_city']}")
         print(f"\tAddress: {hotel[0]['street_address']}")
-        self.hotel.list_hotel_room_types(hotel_id)
-        self.hotel.list_dining_options()
-        self.hotel.list_payment_methods()
+        self.list_hotel_room_types(hotel_id)
+        self.list_dining_options()
+        self.list_payment_methods()
+
+    def choose_hotel(self):
+        self.list_hotels()
+        hotel_id = int(input("Enter the number of hotel from list above: "))
+        hotels = database.get_all_hotels()
+        searching = True
+        while searching:
+            for hotel in hotels:
+                if hotel['hotel_ID'] == hotel_id:
+                    searching = False
+                    break
+            if searching:
+                self.list_hotels()
+                hotel_id = int(input("Enter the proper hotel number from list above: "))
+        return hotel_id
 
     def cost_statistics(self):
         costs = database.get_min_max_avg_cost()
