@@ -1,6 +1,10 @@
 from system import System
 
 
-class Menu:
+def main():
     system = System()
     system.menu()
+
+
+if __name__ == '__main__':
+    main()
