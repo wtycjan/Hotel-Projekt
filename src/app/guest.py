@@ -1,20 +1,14 @@
-from database import Database
+from booking_factory import BookingFactory
 import system
-from reservations import Reservation
-from hotel import Hotel
-
 from src.app.guest_interface import GuestInterface
 
 
 class Guest:
-    #reservations = Reservation()
-    #hotels = Hotel()
-    database = Database()
+    __bookingFactory = BookingFactory()
     guest_interface = GuestInterface()
 
     def client_menu(self, user_id):
         user_input = input(system.CLIENT_MENU)
-        print(self.database)
         while True:
             if user_input == 'hotels':
                 #self.hotels.list_hotels()
@@ -89,7 +83,7 @@ class Guest:
                 decision = input(system.DECISION_INTERFACE)
                 while True:
                     if decision == 'save':
-                        self.database.add_reservation(user_id, hotel_id, first_day_obj.date(), last_day_obj.date(), room_id,
+                        self.__bookingFactory.get_booking_info("Database").add_reservation(user_id, hotel_id, first_day_obj.date(), last_day_obj.date(), room_id,
                                                  dining_option_id, payment_method_id, reservation_cost)
                         # self.guest_interface.GI_add_reservation(user_id, hotel_id, first_day_obj.date(), last_day_obj.date(),
                         #                               room_id, dining_option_id, payment_method_id, reservation_cost)
@@ -162,7 +156,7 @@ class Guest:
                 print(f"Reservation cost: {reservation_obj['cost']} PLN for {reservation_period.days} days.")
                 decision = input(system.EDIT_DECISION_INTERFACE)
                 if decision == 'yes':
-                    self.database.update_my_reservation(reservation_obj['hotel_id'], reservation_obj['first_day'],
+                    self.__bookingFactory.get_booking_info("Database").update_my_reservation(reservation_obj['hotel_id'], reservation_obj['first_day'],
                                                    reservation_obj['last_day'], reservation_obj['room_id'],
                                                    reservation_obj['dining_option_id'],
                                                    reservation_obj['payment_method_id'], reservation_obj['cost'],
@@ -193,7 +187,7 @@ class Guest:
                 reservation_obj = self.guest_interface.GI_choose_reservation(user_id, 'delete')
                 decision = input(system.DELETE_DECISION_INTERFACE)
                 if decision == 'yes':
-                    self.database.delete_reservation(reservation_obj[0]['reservation_ID'])
+                    self.__bookingFactory.get_booking_info("Database").delete_reservation(reservation_obj[0]['reservation_ID'])
                     #self.guest_interface.GI_delete_reservation(reservation_obj[0]['reservation_ID'])
                     print("Your reservation has been deleted.")
                 elif decision == 'no':
@@ -203,7 +197,7 @@ class Guest:
             elif user_input == 'delete all':
                 decision = input(system.DELETE_DECISION_INTERFACE)
                 if decision == 'yes':
-                    self.database.delete_all_my_reservation(user_id)
+                    self.__bookingFactory.get_booking_info("Database").delete_all_my_reservation(user_id)
                     #self.guest_interface.GI_delete_all_my_reservation(user_id)
                     print("All your reservations have been deleted.")
                     break

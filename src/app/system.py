@@ -1,16 +1,11 @@
-from database import Database
 import sys
-from guest import Guest
-from worker import Worker
+from booking_factory import BookingFactory
 
 
 class System:
-    guest = Guest()
-    worker = Worker()
-    database = Database()
+    __bookingFactory = BookingFactory()
 
     def menu(self):
-        print(self.database)
         user_input = input(START_MENU_INTERFACE)
         user_id = 0
         user_type = 0
@@ -20,7 +15,7 @@ class System:
             self.register_user()
             self.menu()
         elif user_input == 'exit':
-            self.database.close_database()
+            self.__bookingFactory.get_booking_info("Database").close_database()
             sys.exit(0)
         else:
             print("Unknown command! Please try again.")
@@ -28,10 +23,10 @@ class System:
         if user_id != 0:
             if user_type == 0:
                 print("Logged in as a client!")
-                self.guest.client_menu(user_id)
+                self.__bookingFactory.get_booking_info("Guest").client_menu(user_id)
             else:
                 print("Logged in as a administrator!")
-                self.worker.worker_menu(user_id)
+                self.__bookingFactory.get_booking_info("Worker").worker_menu(user_id)
         else:
             self.menu()
 
@@ -40,7 +35,7 @@ class System:
         password = input("Enter your password: ")
         user_id = 0
         user_type = 0
-        for user in self.database.get_log_info():
+        for user in self.__bookingFactory.get_booking_info("Database").get_log_info():
             if login == user['user_login'] and password == user['user_password']:
                 user_id = user['user_ID']
                 user_type = user['user_type']
@@ -90,7 +85,7 @@ class System:
         user_password = input("Enter your password: ")
         user_type = 0
 
-        self.database.add_user(user_name, user_surname, user_email, user_telephone, user_PESEL, user_login, user_password,
+        self.__bookingFactory.get_booking_info("Database").add_user(user_name, user_surname, user_email, user_telephone, user_PESEL, user_login, user_password,
                           user_type)
 
 
