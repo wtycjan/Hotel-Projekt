@@ -2,6 +2,8 @@ import database
 from database import Database
 
 
+
+
 class Hotel:
     database = Database()
 
@@ -63,6 +65,8 @@ class Hotel:
     def choose_hotel(self):
         self.list_hotels()
         hotel_id = int(input("Enter the number of hotel from list above: "))
+        #hotel_id = system.System.check_if_correct_value(self, 'hotel', 'int')
+
         hotels = self.database.get_all_hotels()
         searching = True
         while searching:
@@ -73,6 +77,7 @@ class Hotel:
             if searching:
                 self.list_hotels()
                 hotel_id = int(input("Enter the proper hotel number from list above: "))
+                #hotel_id = system.System.check_if_correct_value(self, 'hotel', 'int')
         return hotel_id
 
     def cost_statistics(self):

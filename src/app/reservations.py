@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 
 import system
 from database import Database
@@ -48,7 +48,8 @@ class Reservation:
 
     def choose_room(self, hotel_id):
         self.hotels.list_all_rooms(hotel_id)
-        room_id = int(input("Enter the room number from a list above you want to book: "))
+        #room_id = int(input("Enter the room number from a list above you want to book: "))
+        room_id = system.System.check_if_correct_value(self,'room', 'int')
         rooms = self.database.get_all_rooms(hotel_id)
         room_cost = 0
         searching = True
@@ -60,12 +61,15 @@ class Reservation:
                     break
             if searching:
                 self.hotels.list_all_rooms(hotel_id)
-                room_id = int(input("Enter the proper room number from a list above you want to book: "))
+                #room_id = int(input("Enter the proper room number from a list above you want to book: "))
+                room_id = system.System.check_if_correct_value(self, 'room', 'int')
         return room_id, room_cost
 
     def choose_dining_option(self):
         self.hotels.list_dining_options()
-        dining_option_id = int(input("Enter dining option number from a list above: "))
+        #dining_option_id = int(input("Enter dining option number from a list above: "))
+        dining_option_id = system.System.check_if_correct_value(self,'dining option', 'int')
+
         dining_options = self.database.get_dining_options()
         dining_option_cost = 0
         searching = True
@@ -77,12 +81,14 @@ class Reservation:
                     break
             if searching:
                 self.hotels.list_dining_options()
-                dining_option_id = int(input("Enter proper dining option number from a list above: "))
+                #dining_option_id = int(input("Enter proper dining option number from a list above: "))
+                dining_option_id = system.System.check_if_correct_value(self, 'dining option', 'int')
         return dining_option_id, dining_option_cost
 
     def choose_payment_method(self):
         self.hotels.list_payment_methods()
         payment_method_id = int(input("Enter payment method number from a list above: "))
+        #payment_method_id = system.System.check_if_correct_value(self,'payment method', 'int')
         payment_methods = self.database.get_payment_methods()
         payment_method_discount = 0
         searching = True
@@ -95,11 +101,13 @@ class Reservation:
             if searching:
                 self.hotels.list_payment_methods()
                 payment_method_id = int(input("Enter proper payment method number from a list above: "))
+                #payment_method_id = system.System.check_if_correct_value(self,'payment method','int')
         return payment_method_id, payment_method_discount
 
     def choose_reservation(self, user_id, action_name):
         self.list_my_reservations_info(user_id)
-        reservation_id = int(input(f"Enter the reservation number from a list above, you want to {action_name}: "))
+        #reservation_id = int(input(f"Enter the reservation number from a list above, you want to {action_name}: "))
+        reservation_id =  system.System.check_if_correct_value(self,'reservation', 'int')
         reservations = self.database.get_my_reservations_info(user_id)
         searching = True
         reservation_obj = 0
@@ -111,8 +119,9 @@ class Reservation:
                     break
             if searching:
                 self.list_my_reservations_info(user_id)
-                reservation_id = int(
-                    input(f"Enter the proper reservation number from a list above, you want to {action_name}: "))
+                #reservation_id = int(
+                 #   input(f"Enter the proper reservation number from a list above, you want to {action_name}: "))
+                reservation_id = system.System.check_if_correct_value(self, 'reservation', 'int')
         return reservation_obj
 
     def list_all_reservations(self):

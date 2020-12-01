@@ -67,6 +67,19 @@ class System:
                 break
         return user_input
 
+    def check_if_correct_value(self, name, type):
+        if type == 'int':
+            while True:
+                user_input = input(f"Enter the proper {name} number from a list above: ")
+                try:
+                    n = int(user_input)
+                except ValueError:
+                    print("Entered value is not a number. Try again!")
+                    continue
+                else:
+                    break
+        return n
+
     def register_user(self):
         user_name = input("Enter your name: ")
         user_surname = input("Enter your surname: ")
