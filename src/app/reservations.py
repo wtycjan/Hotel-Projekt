@@ -1,12 +1,13 @@
 from datetime import datetime
 
 import system
-import database
+from database import Database
 from hotel import Hotel
 
 
 class Reservation:
     hotels = Hotel()
+    database = Database()
 
     def calculate_cost(self, reservation_period, room_cost, dining_option_cost, payment_method_discount):
         return (reservation_period * room_cost + dining_option_cost) * payment_method_discount
@@ -22,7 +23,6 @@ class Reservation:
             else:
                 break
         return datetime.datetime.strptime(date_string, date_format), date_string
-
 
     def choose_start_date(self, date_format):
         first_day = input("Enter first day of your reservation 'RRRR-MM-DD': ")
@@ -49,7 +49,7 @@ class Reservation:
     def choose_room(self, hotel_id):
         self.hotels.list_all_rooms(hotel_id)
         room_id = int(input("Enter the room number from a list above you want to book: "))
-        rooms = database.get_all_rooms(hotel_id)
+        rooms = self.database.get_all_rooms(hotel_id)
         room_cost = 0
         searching = True
         while searching:
@@ -66,7 +66,7 @@ class Reservation:
     def choose_dining_option(self):
         self.hotels.list_dining_options()
         dining_option_id = int(input("Enter dining option number from a list above: "))
-        dining_options = database.get_dining_options()
+        dining_options = self.database.get_dining_options()
         dining_option_cost = 0
         searching = True
         while searching:
@@ -83,7 +83,7 @@ class Reservation:
     def choose_payment_method(self):
         self.hotels.list_payment_methods()
         payment_method_id = int(input("Enter payment method number from a list above: "))
-        payment_methods = database.get_payment_methods()
+        payment_methods = self.database.get_payment_methods()
         payment_method_discount = 0
         searching = True
         while searching:
@@ -100,13 +100,13 @@ class Reservation:
     def choose_reservation(self, user_id, action_name):
         self.list_my_reservations_info(user_id)
         reservation_id = int(input(f"Enter the reservation number from a list above, you want to {action_name}: "))
-        reservations = database.get_my_reservations_info(user_id)
+        reservations = self.database.get_my_reservations_info(user_id)
         searching = True
         reservation_obj = 0
         while searching:
             for reservation in reservations:
                 if reservation['reservation_ID'] == reservation_id:
-                    reservation_obj = database.get_my_reservation(reservation_id)
+                    reservation_obj = self.database.get_my_reservation(reservation_id)
                     searching = False
                     break
             if searching:
@@ -115,11 +115,8 @@ class Reservation:
                     input(f"Enter the proper reservation number from a list above, you want to {action_name}: "))
         return reservation_obj
 
-
-
-    @staticmethod
-    def list_all_reservations():
-        reservation_list = database.get_all_reservations_info()
+    def list_all_reservations(self):
+        reservation_list = self.database.get_all_reservations_info()
         for reservation in reservation_list:
             print(f"Reservation number: {reservation['reservation_ID']}\n"
                   f"\tClient: {reservation['user_name']} {reservation['user_surname']}\n"
@@ -129,9 +126,8 @@ class Reservation:
                   f"\tDining option: {reservation['dining_option_type']}\n"
                   f"\tPayment: {reservation['payment_method']} - {reservation['cost']} PLN")
 
-    @staticmethod
-    def list_my_reservations_info(user_id):
-        reservation_list = database.get_my_reservations_info(user_id)
+    def list_my_reservations_info(self, user_id):
+        reservation_list = self.database.get_my_reservations_info(user_id)
         for reservation in reservation_list:
             print(f"Reservation number: {reservation['reservation_ID']}\n"
                   f"\tClient: {reservation['user_name']} {reservation['user_surname']}\n"

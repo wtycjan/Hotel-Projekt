@@ -1,4 +1,4 @@
-import database
+from database import Database
 import sys
 from guest import Guest
 from worker import Worker
@@ -7,8 +7,10 @@ from worker import Worker
 class System:
     guest = Guest()
     worker = Worker()
+    database = Database()
 
     def menu(self):
+        print(self.database)
         user_input = input(START_MENU_INTERFACE)
         user_id = 0
         user_type = 0
@@ -18,7 +20,7 @@ class System:
             self.register_user()
             self.menu()
         elif user_input == 'exit':
-            database.close_database()
+            self.database.close_database()
             sys.exit(0)
         else:
             print("Unknown command! Please try again.")
@@ -38,7 +40,7 @@ class System:
         password = input("Enter your password: ")
         user_id = 0
         user_type = 0
-        for user in database.get_log_info():
+        for user in self.database.get_log_info():
             if login == user['user_login'] and password == user['user_password']:
                 user_id = user['user_ID']
                 user_type = user['user_type']
@@ -75,7 +77,7 @@ class System:
         user_password = input("Enter your password: ")
         user_type = 0
 
-        database.add_user(user_name, user_surname, user_email, user_telephone, user_PESEL, user_login, user_password,
+        self.database.add_user(user_name, user_surname, user_email, user_telephone, user_PESEL, user_login, user_password,
                           user_type)
 
 

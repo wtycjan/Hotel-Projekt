@@ -1,4 +1,4 @@
-import database
+from database import Database
 import system
 from reservations import Reservation
 from hotel import Hotel
@@ -7,9 +7,11 @@ from hotel import Hotel
 class Guest:
     reservations = Reservation()
     hotels = Hotel()
+    database = Database()
 
     def client_menu(self, user_id):
         user_input = input(system.CLIENT_MENU)
+        print(self.database)
         while True:
             if user_input == 'hotels':
                 self.hotels.list_hotels()
@@ -69,7 +71,7 @@ class Guest:
                 decision = input(system.DECISION_INTERFACE)
                 while True:
                     if decision == 'save':
-                        database.add_reservation(user_id, hotel_id, first_day_obj.date(), last_day_obj.date(), room_id,
+                        self.database.add_reservation(user_id, hotel_id, first_day_obj.date(), last_day_obj.date(), room_id,
                                                  dining_option_id, payment_method_id, reservation_cost)
                         print("Your reservation has been saved.")
                         break
@@ -126,7 +128,7 @@ class Guest:
                 print(f"Reservation cost: {reservation_obj['cost']} PLN for {reservation_period.days} days.")
                 decision = input(system.EDIT_DECISION_INTERFACE)
                 if decision == 'yes':
-                    database.update_my_reservation(reservation_obj['hotel_id'], reservation_obj['first_day'],
+                    self.database.update_my_reservation(reservation_obj['hotel_id'], reservation_obj['first_day'],
                                                    reservation_obj['last_day'], reservation_obj['room_id'],
                                                    reservation_obj['dining_option_id'],
                                                    reservation_obj['payment_method_id'], reservation_obj['cost'],
@@ -151,7 +153,7 @@ class Guest:
                 reservation_obj = self.reservations.choose_reservation(user_id, 'delete')
                 decision = input(system.DELETE_DECISION_INTERFACE)
                 if decision == 'yes':
-                    database.delete_reservation(reservation_obj[0]['reservation_ID'])
+                    self.database.delete_reservation(reservation_obj[0]['reservation_ID'])
                     print("Your reservation has been deleted.")
                 elif decision == 'no':
                     pass
@@ -160,7 +162,7 @@ class Guest:
             elif user_input == 'delete all':
                 decision = input(system.DELETE_DECISION_INTERFACE)
                 if decision == 'yes':
-                    database.delete_all_my_reservation(user_id)
+                    self.database.delete_all_my_reservation(user_id)
                     print("All your reservations have been deleted.")
                     break
                 elif decision == 'no':
@@ -171,3 +173,4 @@ class Guest:
                 print("Unknown command! Try again.")
 
             user_input = input(system.CLIENT_PICK_TO_DELETE_RESERVATION_MENU)
+

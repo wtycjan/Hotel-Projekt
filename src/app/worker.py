@@ -2,12 +2,14 @@ import system
 from hotel import Hotel
 from guest import Guest
 from reservations import Reservation
-import database
+from database import Database
+
 
 class Worker:
     hotel = Hotel()
     guest = Guest()
     reservations = Reservation()
+    database = Database()
 
     def worker_menu(self, user_id):
         user_input = input(system.WORKER_MENU)
@@ -49,10 +51,9 @@ class Worker:
 
     def list_clients_with_multiple_reservations(self):
         print("List of clients with multiple reservations:")
-        clients = database.get_clients_with_multiple_reservations()
+        clients = self.database.get_clients_with_multiple_reservations()
         for client in clients:
             print(f"{client['user_name']} {client['user_surname']} has {client['reservations']} reservations.")
-
 
     def adding_hotel_process(self):
         hotel_name = input("Enter the name of the new hotel: ")
@@ -62,10 +63,10 @@ class Worker:
         street_address = input("Enter hotel address: ")
         decision = input(system.ADD_HOTEL_DECISION_INTERFACE)
         if decision == 'yes':
-            database.add_country(country_id, country_name)
-            database.add_location(location_city, street_address, country_id)
-            location_id = database.get_latest_location_id()
-            database.add_hotel(hotel_name, location_id[0]['location_id'])
+            self.database.add_country(country_id, country_name)
+            self.database.add_location(location_city, street_address, country_id)
+            location_id = self.database.get_latest_location_id()
+            self.database.add_hotel(hotel_name, location_id[0]['location_id'])
             print("New hotel has been added to the offer.")
         elif decision == 'no':
             pass
@@ -78,7 +79,7 @@ class Worker:
         room_type_id = int(input("Enter the number of room type you want to create: "))
         decision = input(system.ADD_ROOM_DECISION_INTERFACE)
         if decision == 'yes':
-            database.add_room(hotel_id, room_type_id)
+            self.database.add_room(hotel_id, room_type_id)
             print("New room has been added to the offer.")
         elif decision == 'no':
             pass
@@ -89,7 +90,7 @@ class Worker:
         hotel_id = self.hotel.choose_hotel()
         decision = input(system.DELETE_HOTEL_DECISION_INTERFACE)
         if decision == 'yes':
-            database.delete_hotel(hotel_id)
+            self.database.delete_hotel(hotel_id)
             print("Hotel has been removed from the offer.")
         elif decision == 'no':
             pass
@@ -102,7 +103,7 @@ class Worker:
         print(room_id)
         decision = input(system.DELETE_ROOM_DECISION_INTERFACE)
         if decision == 'yes':
-            database.delete_room(room_id)
+            self.database.delete_room(room_id)
             print("Room has been removed from the offer.")
         elif decision == 'no':
             pass
@@ -116,13 +117,13 @@ class Worker:
                 self.hotel.list_room_types()
                 room_type_id = int(input("Enter the number of room type you want to change cost: "))
                 room_type_price = int(input("Enter a new price for this room type: "))
-                database.change_room_type_cost(room_type_id, room_type_price)
+                self.database.change_room_type_cost(room_type_id, room_type_price)
                 print("This room type cost has been changed.")
             elif user_input == 'dining cost':
                 self.hotel.list_dining_options()
                 dining_option_id = int(input("Enter the number of dining option you want to change cost: "))
                 dining_option_cost = int(input("Enter a new price for this room dining option: "))
-                database.change_dining_option_cost(dining_option_id, dining_option_cost)
+                self.database.change_dining_option_cost(dining_option_id, dining_option_cost)
                 print("This dining option cost has been changed.")
             else:
                 print("Unknown command! Try again.")
