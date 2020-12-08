@@ -104,21 +104,25 @@ class Reservation:
     def choose_reservation(self, user_id, action_name):
         self.list_my_reservations_info(user_id)
         #reservation_id = int(input(f"Enter the reservation number from a list above, you want to {action_name}: "))
-        reservation_id =  system.System.check_if_correct_value(self,'reservation', 'int')
         reservations = self.__bookingFactory.get_booking_info("Database").get_my_reservations_info(user_id)
-        searching = True
-        reservation_obj = 0
-        while searching:
-            for reservation in reservations:
-                if reservation['reservation_ID'] == reservation_id:
-                    reservation_obj = self.__bookingFactory.get_booking_info("Database").get_my_reservation(reservation_id)
-                    searching = False
-                    break
-            if searching:
-                self.list_my_reservations_info(user_id)
-                #reservation_id = int(
-                 #   input(f"Enter the proper reservation number from a list above, you want to {action_name}: "))
-                reservation_id = system.System.check_if_correct_value(self, 'reservation', 'int')
+        reservation_obj = None
+        if (len(reservations) == 0):
+            print("You don't have any reservations")
+
+        else:
+            reservation_id =  system.System.check_if_correct_value(self,'reservation', 'int')
+            searching = True
+            while searching:
+                for reservation in reservations:
+                    if reservation['reservation_ID'] == reservation_id:
+                        reservation_obj = self.__bookingFactory.get_booking_info("Database").get_my_reservation(reservation_id)
+                        searching = False
+                        break
+                if searching:
+                    self.list_my_reservations_info(user_id)
+                    #reservation_id = int(
+                     #   input(f"Enter the proper reservation number from a list above, you want to {action_name}: "))
+                    reservation_id = system.System.check_if_correct_value(self, 'reservation', 'int')
         return reservation_obj
 
     def list_all_reservations(self):

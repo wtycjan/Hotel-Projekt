@@ -1,5 +1,4 @@
 from booking_factory import BookingFactory
-from src.app.database import Database
 
 
 class GuestInterface():
