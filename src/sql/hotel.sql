@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 14 Cze 2020, 10:41
+-- Czas generowania: 12 Sty 2021, 19:30
 -- Wersja serwera: 10.4.11-MariaDB
 -- Wersja PHP: 7.4.3
 
@@ -83,7 +83,7 @@ CREATE TABLE `hotels` (
 --
 
 INSERT INTO `hotels` (`hotel_ID`, `hotel_name`, `location_id`) VALUES
-(1, 'E&M', 1),
+(1, 'T&M', 1),
 (2, 'Hilton', 2),
 (3, 'EwelMat', 3),
 (4, 'Sheraton', 4),
@@ -161,12 +161,12 @@ CREATE TABLE `reservations` (
 --
 
 INSERT INTO `reservations` (`reservation_ID`, `client_id`, `hotel_id`, `first_day`, `last_day`, `room_id`, `dining_option_id`, `payment_method_id`, `cost`) VALUES
-(12, 25, 6, '2020-06-13', '2020-07-11', 58, 3, 3, 17318.5),
+(12, 25, 6, '2020-06-13', '2020-07-11', 51, 1, 4, 5055.3),
 (17, 25, 6, '2020-09-07', '2020-09-14', 51, 4, 4, 1350),
 (18, 25, 4, '2020-11-09', '2020-11-13', 33, 4, 4, 810),
 (19, 25, 3, '2020-12-20', '2020-12-24', 28, 4, 4, 2430),
-(22, 1, 1, '2020-12-02', '2020-12-12', 6, 4, 3, 3895),
-(24, 11, 3, '2020-06-18', '2020-06-28', 28, 1, 2, 5700.66);
+(24, 11, 3, '2020-06-18', '2020-06-28', 28, 1, 2, 5700.66),
+(38, 1, 1, '2020-12-10', '2020-12-20', 4, 3, 4, 2727);
 
 -- --------------------------------------------------------
 
@@ -305,7 +305,7 @@ INSERT INTO `users` (`user_ID`, `user_name`, `user_surname`, `user_email`, `user
 (11, 'Anna', 'Nowak', 'anowak@gmail.com', 756897171, 70021957676, 'annan', 'nowak11', 0),
 (23, 'Mateusz', 'Witkowski', 'www@gmail.com', 123123, 98050201230, 'admin', 'zaq1@WSX', 1),
 (25, 'Katarzyna', 'Olkowska', 'kate@gamil.com', 123123123, 99020305220, 'kate99', 'kate123', 0),
-(26, 'Ewelina', 'Szczupak', 'esz98@wp.pl', 794744181, 98020906307, 'admin1', 'passwd518', 1);
+(27, 'tyci', 'woronko', 'tyci@gmail.com', 123456789, 99010101330, 'tyci', 'zaq1@WSX', 0);
 
 --
 -- Indeksy dla zrzutów tabel
@@ -407,7 +407,7 @@ ALTER TABLE `payment_methods`
 -- AUTO_INCREMENT dla tabeli `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `reservation_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `reservation_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT dla tabeli `rooms`
@@ -425,7 +425,7 @@ ALTER TABLE `room_types`
 -- AUTO_INCREMENT dla tabeli `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `user_ID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- Ograniczenia dla zrzutów tabel
