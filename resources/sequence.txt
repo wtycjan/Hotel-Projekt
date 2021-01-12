@@ -1,0 +1,83 @@
+title Reservation Process
+
+actor User_Guest
+
+User_Guest->System:menu()
+activate System
+System->BookingFactory:get_booking_info("Database")
+activate BookingFactory
+BookingFactory->Database:get_log_info()
+deactivate BookingFactory
+activate Database
+Database-->System: return()
+deactivate Database
+
+
+System->BookingFactory:get_booking_info("Guest")
+activate BookingFactory
+BookingFactory->Guest:client_menu()
+activate Guest
+deactivate BookingFactory
+
+
+
+Guest->GuestInterface:make_reservation()
+activate GuestInterface
+GuestInterface->BookingFactory:get_booking_info("Hotel")
+activate BookingFactory
+BookingFactory->Hotel:GI_choose_hotel()
+deactivate BookingFactory
+activate Hotel
+Hotel-->GuestInterface: return()
+deactivate Hotel
+
+GuestInterface->BookingFactory:get_booking_info("Reservation")
+activate BookingFactory
+BookingFactory->Reservation:GI_choose_date()
+deactivate BookingFactory
+activate Reservation
+Reservation-->GuestInterface: return()
+deactivate Reservation
+
+GuestInterface->BookingFactory:get_booking_info("Hotel")
+activate BookingFactory
+BookingFactory->Hotel:GI_choose_room()
+deactivate BookingFactory
+activate Hotel
+Hotel-->GuestInterface: return()
+deactivate Hotel
+
+GuestInterface->BookingFactory:get_booking_info("Reservation")
+activate BookingFactory
+BookingFactory->Reservation:GI_choose_dining()
+deactivate BookingFactory
+activate Reservation
+Reservation-->GuestInterface: return()
+deactivate Reservation
+
+GuestInterface->BookingFactory:get_booking_info("Reservation")
+activate BookingFactory
+BookingFactory->Reservation:GI_choose_payment()
+deactivate BookingFactory
+activate Reservation
+Reservation-->GuestInterface: return()
+deactivate Reservation
+
+GuestInterface-->Guest: return()
+deactivate GuestInterface
+
+Guest->BookingFactory:get_booking_info("Database")
+activate BookingFactory
+BookingFactory->Database:add_reservation()
+activate Database
+deactivate BookingFactory
+Database-->Guest: return()
+deactivate Database
+
+
+
+Guest->System: log_out()
+deactivate Guest
+
+System-->User_Guest:exit(0)
+deactivate System
